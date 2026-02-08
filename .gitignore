@@ -1,0 +1,6 @@
+.env
+/target
+
+*.out
+*.exe
+/tauri/gen/schemas

@@ -1,0 +1,11 @@
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+   0.118001312s  INFO prepare_target{force=false package_id=cli v0.1.0 (/home/porifa/Документы/RustedWire/cli) target="cli"}: cargo::core::compiler::fingerprint: dependency on `core` is newer than we are 1770539750.497284827s > 1770539328.833905308s "/home/porifa/Документы/RustedWire/cli"
+   0.118076663s  INFO prepare_target{force=false package_id=cli v0.1.0 (/home/porifa/Документы/RustedWire/cli) target="cli"}: cargo::core::compiler::fingerprint: fingerprint dirty for cli v0.1.0 (/home/porifa/Документы/RustedWire/cli)/Check { test: false }/TargetInner { name: "cli", doc: true, ..: with_path("/home/porifa/Документы/RustedWire/cli/src/main.rs", Edition2024) }
+   0.118086041s  INFO prepare_target{force=false package_id=cli v0.1.0 (/home/porifa/Документы/RustedWire/cli) target="cli"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDependency { name: "core", dep_mtime: FileTime { seconds: 1770539750, nanos: 497284827 }, max_mtime: FileTime { seconds: 1770539328, nanos: 833905308 } })
+   0.120049656s  INFO prepare_target{force=false package_id=cli v0.1.0 (/home/porifa/Документы/RustedWire/cli) target="cli"}: cargo::core::compiler::fingerprint: dependency on `core` is newer than we are 1770539750.497284827s > 1770539328.833905308s "/home/porifa/Документы/RustedWire/cli"
+   0.120074672s  INFO prepare_target{force=false package_id=cli v0.1.0 (/home/porifa/Документы/RustedWire/cli) target="cli"}: cargo::core::compiler::fingerprint: fingerprint dirty for cli v0.1.0 (/home/porifa/Документы/RustedWire/cli)/Check { test: true }/TargetInner { name: "cli", doc: true, ..: with_path("/home/porifa/Документы/RustedWire/cli/src/main.rs", Edition2024) }
+   0.120080312s  INFO prepare_target{force=false package_id=cli v0.1.0 (/home/porifa/Документы/RustedWire/cli) target="cli"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDependency { name: "core", dep_mtime: FileTime { seconds: 1770539750, nanos: 497284827 }, max_mtime: FileTime { seconds: 1770539328, nanos: 833905308 } })
+    Checking cli v0.1.0 (/home/porifa/Документы/RustedWire/cli)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.15s

@@ -1,0 +1,9 @@
+[package]
+name = "kernel"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+axum = { version = "0.8.8", features = ["multipart"] }
+gethostname = "1.1.0"
+tokio = { version = "1.49.0", features = ["full"] }
