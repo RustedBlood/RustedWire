@@ -2,11 +2,11 @@ use gethostname::gethostname;
 use std::os::unix::ffi::OsStrExt;
 use tokio::time;
 use tokio::{io, net::UdpSocket};
-pub async fn start_to_recieve() -> Result<(), io::Error> {
+pub async fn broadcast_send_msg() -> Result<(), io::Error> {
     let socket = UdpSocket::bind("0.0.0.0:0").await?;
     socket.set_broadcast(true)?;
     let message = gethostname();
-    println!("started to recieve with name: {:?}", message);
+    println!("started to send with name: {:?}", message);
     loop {
         socket
             .send_to(message.as_bytes(), "255.255.255.255:9999")

@@ -9,13 +9,15 @@ pub async fn upload(mut multipart: Multipart) -> impl IntoResponse {
 
         let data = field.bytes().await.unwrap();
 
-        let mut file = tokio::fs::File::create(format!("uploads/{}", filename))
+        let mut file = tokio::fs::File::create(format!("~/uploads/{}", filename))
             .await
             .unwrap();
 
         file.write_all(&data).await.unwrap();
     }
 }
+
+pub async fn handle_prepare() -> impl IntoResponse {}
 
 pub async fn index() -> &'static str {
     "Ok"
