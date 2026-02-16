@@ -20,6 +20,13 @@ pub enum SessionState {
     Cancelled,    // Инициатор отменил передачу
     Expired,      // Время ожидания истекло
 }
+
+pub struct SenderInfo {
+    pub name: String,
+    pub ip: String,
+    pub files: Vec<FileInfo>,
+}
+
 #[derive(Debug, Clone)]
 pub struct FileInfo {
     pub name: String,

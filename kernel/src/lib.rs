@@ -4,7 +4,6 @@ pub mod domain;
 
 #[cfg(test)]
 mod tests {
-    use std::str::FromStr;
 
     use uuid::Uuid;
 

@@ -1,8 +1,10 @@
 use crate::application::error;
+use crate::domain;
 use crate::domain::transfer::TransferSession;
+use async_trait::async_trait;
 
-pub trait SessionStorageRepository {
-    fn new() -> Self;
+#[async_trait]
+pub trait SessionStorageRepository: Send + Sync {
     async fn save_session(
         &self,
         session: &TransferSession,
@@ -11,4 +13,9 @@ pub trait SessionStorageRepository {
         &self,
         id: uuid::Uuid,
     ) -> Result<TransferSession, error::StorageServiceError>;
+}
+
+#[async_trait]
+pub trait UserInteractionService: Send + Sync {
+    async fn ask_accept_files(&self, sender_info: &domain::transfer::SenderInfo) -> bool;
 }

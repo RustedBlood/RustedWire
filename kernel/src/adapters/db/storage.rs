@@ -1,8 +1,8 @@
 use crate::application::error::StorageServiceError;
 use crate::application::ports::SessionStorageRepository;
 use crate::domain::transfer::TransferSession;
+use async_trait::async_trait;
 use dashmap::DashMap;
-
 use std::sync::Arc;
 use uuid::Uuid;
 
@@ -19,10 +19,8 @@ impl SessionStorage {
     }
 }
 
+#[async_trait]
 impl SessionStorageRepository for SessionStorage {
-    fn new() -> Self {
-        Self::new()
-    }
     async fn save_session(&self, session: &TransferSession) -> Result<(), StorageServiceError> {
         if self.storage.insert(session.id, session.clone()).is_some() {
             Err(StorageServiceError::FailedToAddSession)
