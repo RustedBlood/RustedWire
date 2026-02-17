@@ -16,7 +16,6 @@ mod tests {
             token: "I am a token".to_string(),
             files: Vec::new(),
             sender: "CachyOs".to_string(),
-            reciever: "Windows".to_string(),
             state: domain::transfer::SessionState::Proposed,
         };
         let second_session = domain::transfer::TransferSession {
@@ -24,7 +23,6 @@ mod tests {
             token: "I am a token".to_string(),
             files: Vec::new(),
             sender: "CachyOs".to_string(),
-            reciever: "Arch".to_string(),
             state: domain::transfer::SessionState::Proposed,
         };
 
