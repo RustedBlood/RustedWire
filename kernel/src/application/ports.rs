@@ -17,5 +17,5 @@ pub trait SessionStorageRepository: Send + Sync {
 
 #[async_trait]
 pub trait UserInteractionService: Send + Sync {
-    async fn ask_accept_files(&self, sender_info: &domain::transfer::SenderInfo) -> bool;
+    fn ask_accept_files(&self, sender_info: &domain::transfer::SenderInfo) -> bool;
 }

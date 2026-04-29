@@ -1,8 +1,12 @@
+use std::sync::Arc;
+
 use clap::Parser;
 use kernel::adapters::discovery;
 use kernel::adapters::http::server::start_server;
 use reqwest::Client;
-use std::io::{self, Write};
+
+mod user_service;
+
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
 struct Args {
@@ -19,15 +23,16 @@ async fn main() {
     eprintln!("DEBUG: Program started");
     let args = Args::parse();
     println!("{}, {}, {}", args.reciver, args.sender, args.file);
+    let user_interact = Arc::new(user_service::UserService {});
     if args.reciver {
         println!("Started to recieve");
         tokio::spawn(async move {
-            start_server().await;
+            start_server(user_interact).await;
         });
-        discovery::reciever::start_to_recieve().await.unwrap();
+        discovery::reciever::broadcast_send_msg().await.unwrap();
     } else if args.sender {
         println!("Starting to search recievers...");
-        let reciever = discovery::sender::search_recivers().await.unwrap();
+        let reciever = discovery::sender::broadcast_get_recievers().await.unwrap();
         println!("Found reciever! Starting sending files!");
         let url = format!("http://{}:8080/upload", reciever.ip());
         upload_file(&url, &args.file).await.unwrap();

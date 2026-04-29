@@ -41,7 +41,7 @@ pub async fn handle_prepare(
     State(state): State<HttpState>,
     Json(sender): Json<SenderInfo>,
 ) -> Json<PrepareResponse> {
-    let is_accepted = state.user_service.ask_accept_files(&sender).await;
+    let is_accepted = state.user_service.ask_accept_files(&sender);
     if is_accepted {
         let uuid = Uuid::new_v4();
         let token = generate_transfer_token().await;
