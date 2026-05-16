@@ -21,7 +21,7 @@ pub async fn start_server(user_service: Arc<dyn ports::UserInteractionService>) 
     };
     let app = Router::new()
         .route("/health", get(health))
-        .route("/transfer/upload/:uuid", post(upload))
+        .route("/transfer/upload/{uuid}", post(upload))
         .route("/transfer/prepare", post(handle_prepare))
         .with_state(state);
     let listener = tokio::net::TcpListener::bind("0.0.0.0:8080").await.unwrap();

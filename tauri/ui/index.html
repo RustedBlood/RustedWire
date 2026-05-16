@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RustedWire</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <h1>RustedWire</h1>
+  <span class="hostname" id="hostname">loading...</span>
+</header>
+
+<nav>
+  <button class="tab active" data-tab="receive">Receive</button>
+  <button class="tab" data-tab="send">Send</button>
+</nav>
+
+<section id="tab-receive" class="tab-content active">
+  <div class="panel">
+    <div class="panel-header">
+      <h2>Server</h2>
+      <span class="status-dot" id="server-dot"></span>
+      <span id="server-addr">not running</span>
+    </div>
+    <div class="panel-body">
+      <button id="btn-start-server" class="btn btn-green">Start Server</button>
+      <button id="btn-stop-server" class="btn btn-red" disabled>Stop Server</button>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="panel-header">
+      <h2>Transfer History</h2>
+      <button id="btn-clear-history" class="btn btn-small">Clear</button>
+    </div>
+    <div class="panel-body" id="history-list">
+      <p class="muted">No transfers yet</p>
+    </div>
+  </div>
+</section>
+
+<section id="tab-send" class="tab-content">
+  <div class="panel">
+    <div class="panel-header">
+      <h2>Discovered Hosts</h2>
+      <button id="btn-discover" class="btn btn-small">Refresh</button>
+    </div>
+    <div class="panel-body" id="hosts-list">
+      <p class="muted">Click Refresh to discover hosts</p>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="panel-header">
+      <h2>Files to Send</h2>
+      <div class="panel-header-actions">
+        <button id="btn-pick-files" class="btn btn-small">Browse</button>
+        <button id="btn-clear-files" class="btn btn-small btn-red">Clear</button>
+      </div>
+    </div>
+    <div class="panel-body" id="files-list">
+      <p class="muted">No files selected</p>
+    </div>
+  </div>
+  <button id="btn-send" class="btn btn-blue btn-full" disabled>Send</button>
+  <div id="send-progress" class="progress hidden">
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+    <p id="progress-text"></p>
+  </div>
+</section>
+
+<footer>
+  <span id="toast" class="toast hidden"></span>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

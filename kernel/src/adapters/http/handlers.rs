@@ -1,11 +1,11 @@
 use crate::adapters::http::server::HttpState;
 use crate::domain::transfer::SenderInfo;
 use crate::domain::transfer::{SessionState, TransferSession};
-use axum::extract::{Multipart, State};
+use axum::extract::{Multipart, Path, State};
+use axum::http::{HeaderMap, StatusCode};
 use axum::response::IntoResponse;
 use axum::Json;
 use serde::{Deserialize, Serialize};
-use tokio::io::AsyncWriteExt;
 use uuid::Uuid;
 
 #[derive(Deserialize, Serialize)]
@@ -21,20 +21,61 @@ pub struct PrepareResponse {
     uuid: Option<Uuid>,
     token: Option<String>,
 }
-pub async fn upload(mut multipart: Multipart) -> impl IntoResponse {
+pub async fn upload(
+    State(state): State<HttpState>,
+    Path(uuid): Path<Uuid>,
+    header: HeaderMap,
+    mut multipart: Multipart,
+) -> impl IntoResponse {
     while let Some(field) = multipart.next_field().await.unwrap() {
-        let filename = field.file_name().unwrap_or("unknown.bin").to_string();
+        let session_res = state.storage_service.get_session_by_id(&uuid).await;
+        if let Ok(session) = session_res {
+            match header.get("token") {
+                Some(token) => {
+                    let token_str = token.to_str().unwrap();
+                    if token_str != session.token.as_str() {
+                        return (
+                            StatusCode::UNAUTHORIZED,
+                            "No such id was accepted for user!",
+                        );
+                    }
+                }
+                None => {
+                    return (
+                        StatusCode::UNAUTHORIZED,
+                        "No such id was accepted for user!",
+                    )
+                }
+            }
+            let filename = field.file_name().unwrap_or("unknown.bin").to_string();
 
-        println!("Receiving: {}", filename);
+            println!("Receiving: {}", filename);
 
-        let data = field.bytes().await.unwrap();
+            let data = field.bytes().await.unwrap();
 
-        let mut file = tokio::fs::File::create(format!("~/uploads/{}", filename))
-            .await
-            .unwrap();
-
-        file.write_all(&data).await.unwrap();
+            if let Some(download_dir) = dirs::download_dir() {
+                let file_path = download_dir.join(&filename);
+                match tokio::fs::write(&file_path, &data).await {
+                    Ok(_) => {
+                        println!("Saved file with path {:?}", file_path);
+                    }
+                    Err(e) => {
+                        eprintln!("Failed to save file {} with error {}", &filename, &e);
+                        return (StatusCode::INTERNAL_SERVER_ERROR, "Failed to save file!");
+                    }
+                }
+            } else {
+                println!(
+                    "Failed to found download directory! Try to add download dir to environment"
+                );
+                return (
+                    StatusCode::INTERNAL_SERVER_ERROR,
+                    "Download directory wasn't found",
+                );
+            }
+        }
     }
+    return (StatusCode::OK, "Success on uploading files!");
 }
 
 pub async fn handle_prepare(

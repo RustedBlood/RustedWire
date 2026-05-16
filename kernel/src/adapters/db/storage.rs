@@ -1,6 +1,6 @@
 use crate::application::error::StorageServiceError;
 use crate::application::ports::SessionStorageRepository;
-use crate::domain::transfer::TransferSession;
+use crate::domain::transfer::{SessionState, TransferSession};
 use async_trait::async_trait;
 use dashmap::DashMap;
 use std::sync::Arc;
@@ -30,11 +30,22 @@ impl SessionStorageRepository for SessionStorage {
     }
     async fn get_session_by_id(
         &self,
-        id: uuid::Uuid,
+        id: &uuid::Uuid,
     ) -> Result<TransferSession, StorageServiceError> {
         self.storage
-            .get(&id)
+            .get(id)
             .map(|entry| entry.clone())
+            .ok_or(StorageServiceError::SessionNotFound)
+    }
+
+    async fn update_session_state(
+        &self,
+        id: &uuid::Uuid,
+        state: SessionState,
+    ) -> Result<(), StorageServiceError> {
+        self.storage
+            .get_mut(id)
+            .map(|mut entry| entry.state = state)
             .ok_or(StorageServiceError::SessionNotFound)
     }
 }
