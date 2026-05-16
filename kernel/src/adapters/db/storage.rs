@@ -1,0 +1,51 @@
+use crate::application::error::StorageServiceError;
+use crate::application::ports::SessionStorageRepository;
+use crate::domain::transfer::{SessionState, TransferSession};
+use async_trait::async_trait;
+use dashmap::DashMap;
+use std::sync::Arc;
+use uuid::Uuid;
+
+#[derive(Debug, Clone)]
+pub struct SessionStorage {
+    pub storage: Arc<DashMap<Uuid, TransferSession>>,
+}
+
+impl SessionStorage {
+    pub fn new() -> Self {
+        Self {
+            storage: Arc::new(DashMap::new()),
+        }
+    }
+}
+
+#[async_trait]
+impl SessionStorageRepository for SessionStorage {
+    async fn save_session(&self, session: &TransferSession) -> Result<(), StorageServiceError> {
+        if self.storage.insert(session.id, session.clone()).is_some() {
+            Err(StorageServiceError::FailedToAddSession)
+        } else {
+            Ok(())
+        }
+    }
+    async fn get_session_by_id(
+        &self,
+        id: &uuid::Uuid,
+    ) -> Result<TransferSession, StorageServiceError> {
+        self.storage
+            .get(id)
+            .map(|entry| entry.clone())
+            .ok_or(StorageServiceError::SessionNotFound)
+    }
+
+    async fn update_session_state(
+        &self,
+        id: &uuid::Uuid,
+        state: SessionState,
+    ) -> Result<(), StorageServiceError> {
+        self.storage
+            .get_mut(id)
+            .map(|mut entry| entry.state = state)
+            .ok_or(StorageServiceError::SessionNotFound)
+    }
+}
