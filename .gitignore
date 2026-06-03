@@ -4,3 +4,4 @@
 *.out
 *.exe
 /tauri/gen/schemas
+gen
